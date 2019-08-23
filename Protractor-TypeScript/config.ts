@@ -25,6 +25,7 @@ export let config: Config = {
     onPrepare: function() {
         //var jasmineReporters = require('C:/Users/Ahmad Sohail/ProtractorTests/node_modules/jasmine-reporters');
        // jasmine.getEnv().addReporter(new jasmineReporters.JUnitXmlReporter(null, true, true));
+       browser.manage().timeouts().implicitlyWait(30000);
         var width = 1500;
         var height = 900;
         browser.driver.manage().window().setSize(width, height);

@@ -3,11 +3,15 @@ import {element,by} from "protractor";
 import {mainpage} from "./page_objects/mainpage";
 import {hotelresults} from "./page_objects/hotelresults";
 import {bookingpage} from "./page_objects/bookingpage";
+import {protractor} from "protractor";
+
 var chai = require('chai');
 var chaiAsPromised = require('chai-as-promised');
 
 chai.use(chaiAsPromised);
 var expect = chai.expect;
+let EC = protractor.ExpectedConditions;
+
 
 describe('Assignment - 2', function() {
   this.timeout(70000);
@@ -28,7 +32,7 @@ describe('Assignment - 2', function() {
   it('Step1 - Should click Hotel and perform assertions', async function() {
     
     await mainpageobj.hotel_btn_CSS.click();
-    await browser.sleep(3000);
+    //await browser.sleep(3000);  1
     //return Promise.resolve((mainpageobj.origin_CSS).length).should.eventually.equal(1);
      //await console.log(mainpageobj.origin_CSS.length);
      //return expect(Promise.resolve(mainpageobj.origin_CSS.length)).to.eventually.equal(1);
@@ -45,19 +49,19 @@ describe('Assignment - 2', function() {
   it('Step2 - Set Origin BCN and perform assertions', async function() {
     
     await mainpageobj.origin_CSS.click();
-    await browser.sleep(1000);
+    await browser.sleep(1000);  
     await mainpageobj.origin_input_CSS.sendKeys('BCN');
-    await browser.sleep(1000);
+  //  await browser.sleep(1000); 3
     await mainpageobj.origin_BCN_CSS.click();
-    await browser.sleep(1000);
+   // await browser.sleep(1000); 4
     await mainpageobj.search_btn_CSS.click();
-    await browser.sleep(1500);
+  //  await browser.sleep(1500); 5
     await browser.getCurrentUrl().then(function(text){     //Verify user is on Hotel Results page
           console.log(text);
-          expect(text).contain("https://www.kayak.com/hotels/Barcelona,Spain,Barcelona");
+          expect(text).contain("https://www.kayak.com/hotels");
     });
         
-    await browser.sleep(2000);
+   // await browser.sleep(1000); 6
   });  
       /*
   it('Step3 - Select Sleep & Fly and Verify Results', async function() {
@@ -89,46 +93,47 @@ describe('Assignment - 2', function() {
                */
               
   it('Step 7 8 9- Click on Go to Map button tab and Verify Results', async function() {
-
+   await browser.wait(EC.elementToBeClickable(hoteldetailsobj.gotomap_btn_CSS), 5000);
     await hoteldetailsobj.gotomap_btn_CSS.click();
-    await browser.sleep(1000);
+    await browser.sleep(1000); 
     await expect(hoteldetailsobj.map_area_CSS).to.exist;
-    await browser.sleep(10000);
-   
+    //await browser.sleep(10000);
+    
     //await browser.sleep(3000);
     
    // browser.wait(EC.elementToBeClickable(button),5000);
     //button.click();
   //  await hoteldetailsobj.hotel_marker_CSS.click();
+    await browser.wait(EC.elementToBeClickable(hoteldetailsobj.hotel_marker_CSS), 10000);
     await browser.actions().mouseMove(hoteldetailsobj.hotel_marker_CSS).perform();
     await hoteldetailsobj.summary_card_text.getText().then(function(text){
       console.log(text); 
       expect(text).to.equal("Sleep & Fly");  // Verify Summary Card Text
     });
-    await browser.sleep(2000);
+    await browser.sleep(2000); 
     await hoteldetailsobj.hotel_marker_CSS.click();
    
-    await browser.sleep(1000);
+    await browser.sleep(3000); 
   });
   it('Step 10- Click View Deal button tab and Verify Results', async function() {
    
    await hoteldetailsobj.viewdeal_btn_CSS.click();
-   await browser.sleep(3000);
+   await browser.sleep(3000); 
 
    await browser.getAllWindowHandles().then(function (handles) {   // Verify new tab opened and its Title
       expect(handles.length).to.equal(2);
       browser.switchTo().window(handles[1]).then(function () {
         
-        browser.sleep(3000); 
+        browser.sleep(3000);  
         browser.getCurrentUrl().then(function(text){     //Verify user is on Hotel Results page
         console.log(text);
         //expect(text).contain("https://www.agoda.com/");
     });
       browser.driver.close();
       browser.driver.switchTo().window(handles[0]);
-      browser.sleep(3000);
+      browser.sleep(3000); 
       hoteldetailsobj.close_modal_CSS.click();
-      browser.sleep(5000); 
+      browser.sleep(5000);  
     });
     
     });
@@ -139,22 +144,24 @@ describe('Assignment - 2', function() {
   it('Step 11 12- Set London & Find Kayak and Verify Results', async function() {
      
     await mainpageobj.origin_CSS.click();
-    await browser.sleep(5000);
+    await browser.wait(EC.elementToBeClickable(mainpageobj.origin_input2_CSS), 30000);
     await mainpageobj.origin_input2_CSS.sendKeys('LON');
-    await browser.sleep(3000);
+    await browser.sleep(1000);  
     await mainpageobj.origin_LON_CSS.click();
-    await browser.sleep(2000);
+    await browser.sleep(1000); 
     await mainpageobj.search_btn2_CSS.click();
-    await browser.sleep(25000);
+    await browser.wait(EC.elementToBeClickable(hoteldetailsobj.dropdown_icon_CSS), 30000);
+    await browser.sleep(15000); 
     await hoteldetailsobj.dropdown_icon_CSS.click(); 
-    await browser.sleep(1500);
+    await browser.wait(EC.elementToBeClickable(hoteldetailsobj.kayak_option_CSS), 30000);
+   //  await browser.sleep(1500); --
     await hoteldetailsobj.kayak_option_CSS.click(); // CLick Kayak from dropdown list of hotels
     //switch to new Tab
     await browser.getAllWindowHandles().then(function (handles) {   // Verify new tab opened and its Title
       expect(handles.length).to.equal(2);
       browser.switchTo().window(handles[1]);
-
-      browser.sleep(15000);
+      browser.wait(EC.elementToBeClickable(bookingpageobj.hotelname_text_CSS), 30000);
+      //browser.sleep(15000); --
       // Verify Hotel Name
       bookingpageobj.hotelname_text_CSS.getText().then(function(text){
         console.log(text); 
@@ -193,7 +200,8 @@ describe('Assignment - 2', function() {
   });  
 
   it('Step3 - Select Sleep & Fly and Verify Results', async function() {
-    await browser.sleep(13000);
+   // await browser.sleep(13000);
+    await browser.wait(EC.elementToBeClickable(hoteldetailsobj.close_btn_CSS), 30000);
     await hoteldetailsobj.close_btn_CSS.click();
     await hoteldetailsobj.hotel_sleep_CSS.click();
     await expect(hoteldetailsobj.details_text_CSS).to.exist;
@@ -204,9 +212,9 @@ describe('Assignment - 2', function() {
   it('Step 4 5 6 - Click on Maps tab and Verify Results', async function() {
 
     await hoteldetailsobj.map_tab_CSS.click();
-    await browser.sleep(3000);
+   // await browser.sleep(3000); --
     //await expect(hoteldetailsobj.map_CSS).to.exist;
-    await browser.sleep(2000);
+    //await browser.sleep(2000);
     await hoteldetailsobj.reviews_tab_CSS.click();
     await browser.sleep(1000);
     await hoteldetailsobj.reviews_text_CSS.getText().then(function(text){
